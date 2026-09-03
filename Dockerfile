@@ -1,6 +1,6 @@
 FROM python:3.10-slim
 
-# Install system dependencies for Chromium
+# Install system dependencies for Chromium + Playwright
 RUN apt-get update && apt-get install -y \
     wget \
     gnupg \
@@ -20,6 +20,14 @@ RUN apt-get update && apt-get install -y \
     libxkbcommon0 \
     libxshmfence1 \
     libglu1-mesa \
+    libxfixes3 \
+    libpango-1.0-0 \
+    libxext6 \
+    libxrender1 \
+    libxi6 \
+    libxtst6 \
+    libgtk-3-0 \
+    libgdk-pixbuf2.0-0 \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Playwright + Chromium
@@ -33,8 +41,6 @@ COPY . .
 # Install Python dependencies
 RUN pip install -r requirements.txt
 
-# Expose port
 EXPOSE 8000
 
-# Start the server
 CMD ["gunicorn", "-b", "0.0.0.0:8000", "app:app"]
