@@ -9,7 +9,7 @@ def join_gimkit(code, name):
 
             page.goto("https://www.gimkit.com/join")
 
-            page.fill("input[name='code']", code)
+            page.fill("input[name='join']", code)
             page.click("button[type='submit']")
             time.sleep(1)
 
