@@ -1,6 +1,5 @@
 FROM python:3.10-slim
 
-# Install system dependencies for Chromium + Playwright
 RUN apt-get update && apt-get install -y \
     wget \
     gnupg \
@@ -27,18 +26,14 @@ RUN apt-get update && apt-get install -y \
     libxi6 \
     libxtst6 \
     libgtk-3-0 \
-    libgdk-pixbuf2.0-0 \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Playwright + Chromium
 RUN pip install playwright
 RUN playwright install chromium
 
-# Copy project files
 WORKDIR /app
 COPY . .
 
-# Install Python dependencies
 RUN pip install -r requirements.txt
 
 EXPOSE 8000
