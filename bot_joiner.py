@@ -1,5 +1,5 @@
 from playwright.sync_api import sync_playwright
-import time
+import time, base64
 
 def join_gimkit(code, name):
     try:
@@ -9,18 +9,28 @@ def join_gimkit(code, name):
 
             page.goto("https://www.gimkit.com/join", wait_until="networkidle")
 
-            # WAIT for the real join page to load
-            page.wait_for_selector("input[data-testid='game-code-input']", timeout=60000)
+            # DEBUG: show HTML
+            print(page.content())
 
-            # Enter game code
+            # DEBUG: screenshot
+            page.screenshot(path="debug.png")
+            with open("debug.png", "rb") as f:
+                print(base64.b64encode(f.read()).decode())
+
+            # DEBUG: list all inputs/buttons
+            print("INPUTS:", page.locator("input").all_text_contents())
+            print("BUTTONS:", page.locator("button").all_text_contents())
+
+            # WAIT for Cloudflare
+            page.wait_for_timeout(5000)
+
+            # Try real selectors
+            page.wait_for_selector("input[data-testid='game-code-input']", timeout=60000)
             page.fill("input[data-testid='game-code-input']", code)
             page.click("button[data-testid='game-code-submit']")
             time.sleep(1)
 
-            # WAIT for name page
             page.wait_for_selector("input[data-testid='player-name-input']", timeout=60000)
-
-            # Enter name
             page.fill("input[data-testid='player-name-input']", name)
             page.click("button[data-testid='player-name-submit']")
             time.sleep(2)
