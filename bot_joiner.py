@@ -9,13 +9,14 @@ def join_gimkit(code, name):
 
             page.goto("https://www.gimkit.com/join")
 
-            # NEW SELECTORS
-            page.fill("input[placeholder='Game Code']", code)
-            page.click("button:has-text('Join')")
+            # Enter game code
+            page.fill("input[data-testid='game-code-input']", code)
+            page.click("button[data-testid='game-code-submit']")
             time.sleep(1)
 
-            page.fill("input[placeholder='Name']", name)
-            page.click("button:has-text('Join')")
+            # Enter name
+            page.fill("input[data-testid='player-name-input']", name)
+            page.click("button[data-testid='player-name-submit']")
             time.sleep(2)
 
             browser.close()
